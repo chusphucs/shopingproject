@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../contexts/CartContext";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+  const cartCountRedux = useSelector((state) => state.cart.count);
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("auth"));
@@ -15,7 +18,7 @@ export default function Header() {
     cursor: "pointer",
   };
 
-  const { cartCount } = useContext(CartContext);
+  const { wishListCount } = useContext(CartContext);
   return (
     <div>
       <header id="header">
@@ -145,7 +148,8 @@ export default function Header() {
 
                     <li>
                       <Link to={"/wishlist"}>
-                        <i className="fa fa-lock" /> WishList
+                        <i className="fa fa-lock">Wish list</i>
+                        {userData ? wishListCount : ""}
                       </Link>
                     </li>
                     <li>
@@ -156,7 +160,7 @@ export default function Header() {
                     <li>
                       <Link to={`/cart`}>
                         <i class="fa fa-shopping-cart"></i>
-                        {cartCount}
+                        {userData ? cartCountRedux : ""}
                       </Link>
                     </li>
                     <li>

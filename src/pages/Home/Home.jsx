@@ -2,17 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../contexts/CartContext";
+import { addCart } from "../../actions/CartAction";
+import store from "../../store";
 
 export default function Home() {
   const [productList, setProductList] = useState([]);
   const userData = JSON.parse(localStorage.getItem("auth"));
-  const { setCartCount } = useContext(CartContext);
+  const { setWishListCount } = useContext(CartContext);
 
   useEffect(() => {
     axios
       .get("http://localhost/laravel8/laravel8/public/api/product")
       .then((res) => {
         setProductList(res.data.data);
+        console.log(res.data.data);
       });
   }, []);
   const handleAddCart = (productId) => {
@@ -27,17 +30,17 @@ export default function Home() {
     } else {
       cartItems[productId] = 1;
     }
-    setCartCount((prev) => {
-      return prev + 1;
-    });
+    store.dispatch(addCart());
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
   const handleAddWishList = (productId) => {
     let wishList = localStorage.getItem("wishList");
     wishList = wishList ? JSON.parse(wishList) : [];
-
     if (!wishList.includes(productId)) {
       wishList.push(productId);
+      setWishListCount((prev) => {
+        return prev + 1;
+      });
       localStorage.setItem("wishList", JSON.stringify(wishList));
     }
   };
@@ -183,7 +186,7 @@ export default function Home() {
                             <div className="productinfo text-center">
                               <img
                                 src={
-                                  `http://localhost/laravel8/laravel8/public/upload/product/${userData.id}/` +
+                                  `http://localhost/laravel8/laravel8/public/upload/product/${userData?.id}/` +
                                   image[0]
                                 }
                                 alt="productimg"

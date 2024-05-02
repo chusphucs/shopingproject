@@ -16,27 +16,37 @@ import UpdateProduct from "./pages/User/UpdateProduct";
 import ProductDetail from "./pages/Home/ProductDetail";
 import Cart from "./pages/Home/Cart";
 import WishList from "./pages/WihsList/WishList";
+import { CartProvider } from "./contexts/CartContext";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Router>
-    <App>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/wishlist" element={<WishList />} />
+    <Provider store={store}>
+      <CartProvider>
+        <App>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/wishlist" element={<WishList />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/blog/detail/:id" element={<BlogDetail />} />
-        <Route path="/user/update/:id" element={<UserUpdate />} />
-        <Route path="/user/addproduct" element={<AddProduct />} />
-        <Route path="/user/product/update/:id" element={<UpdateProduct />} />
-        <Route path="/user/myproduct" element={<MyProduct />} />
-        <Route path="/product/detail/:id" element={<ProductDetail />} />
-      </Routes>
-    </App>
+            <Route path="/login" element={<Login />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/blog/detail/:id" element={<BlogDetail />} />
+            <Route path="/user/update/:id" element={<UserUpdate />} />
+            <Route path="/user/addproduct" element={<AddProduct />} />
+            <Route
+              path="/user/product/update/:id"
+              element={<UpdateProduct />}
+            />
+            <Route path="/user/myproduct" element={<MyProduct />} />
+            <Route path="/product/detail/:id" element={<ProductDetail />} />
+          </Routes>
+        </App>
+      </CartProvider>
+    </Provider>
   </Router>
 );
 

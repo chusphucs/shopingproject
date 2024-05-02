@@ -21,7 +21,7 @@ export default function Login() {
     axios
       .post("https://localhost/laravel8/laravel8/public/api/login", formData)
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 && !res.data.errors) {
           alert("dang nhap thanh cong");
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("auth", JSON.stringify(res.data.Auth));

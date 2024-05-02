@@ -2,13 +2,15 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../contexts/CartContext";
+import store from "../../store";
+import { addCart } from "../../actions/CartAction";
 
 export default function WishList() {
   const [productList, setProductList] = useState([]);
   const userData = JSON.parse(localStorage.getItem("auth"));
-  const { setCartCount } = useContext(CartContext);
+  const { setWishListCount } = useContext(CartContext);
   const wishList = JSON.parse(localStorage.getItem("wishList"));
-  useEffect(() => {
+  const getWishList = () => {
     axios
       .get("http://localhost/laravel8/laravel8/public/api/product/wishlist")
       .then((res) => {
@@ -20,6 +22,9 @@ export default function WishList() {
       .catch((err) => {
         console.log(err);
       });
+  };
+  useEffect(() => {
+    getWishList();
   }, []);
   const handleAddCart = (productId) => {
     let cartItems = localStorage.getItem("cartItems");
@@ -33,14 +38,27 @@ export default function WishList() {
     } else {
       cartItems[productId] = 1;
     }
-    setCartCount((prev) => {
-      return prev + 1;
-    });
+    store.dispatch(addCart());
+
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
   const handleRemoveWishList = (productId) => {
     let updateList = wishList.filter((wish) => wish != productId);
     localStorage.setItem("wishList", JSON.stringify(updateList));
+    axios
+      .get("http://localhost/laravel8/laravel8/public/api/product/wishlist")
+      .then((res) => {
+        const filteredProducts = res.data.data.filter((product) =>
+          updateList.includes(product.id)
+        );
+        setProductList(filteredProducts);
+        setWishListCount((prev) => {
+          return prev - 1;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div>

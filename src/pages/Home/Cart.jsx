@@ -1,9 +1,13 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
+import store from "../../store";
+import { addCart, removeCart } from "../../actions/CartAction";
 
 export default function Cart() {
   const { setCartCount } = useContext(CartContext);
+  const userData = JSON.parse(localStorage.getItem("auth"));
+
   const jsonToApi = localStorage.getItem("cartItems");
   const [products, setProducts] = useState([]);
   useEffect(() => {
@@ -28,9 +32,10 @@ export default function Cart() {
     });
     setProducts(updatedProducts);
     updateLocalStorage(updatedProducts);
-    setCartCount((prev) => {
-      return prev + 1;
-    });
+    store.dispatch(addCart());
+    // setCartCount((prev) => {
+    //   return prev + 1;
+    // });
   };
 
   const decreaseQuantityById = (productId) => {
@@ -42,9 +47,10 @@ export default function Cart() {
     });
     setProducts(updatedProducts);
     updateLocalStorage(updatedProducts);
-    setCartCount((prev) => {
-      return prev - 1;
-    });
+    store.dispatch(removeCart());
+    // setCartCount((prev) => {
+    //   return prev - 1;
+    // });
   };
 
   const updateLocalStorage = (updatedProducts) => {
@@ -98,7 +104,7 @@ export default function Cart() {
                           <td className="cart_product">
                             <a href>
                               <img
-                                src={`http://localhost/laravel8/laravel8/public/upload/product/19/${image[0]}`}
+                                src={`http://localhost/laravel8/laravel8/public/upload/product/${userData.id}/${image[0]}`}
                                 alt="productimg"
                                 style={{
                                   width: "60px",

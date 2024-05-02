@@ -3,25 +3,22 @@ import Filter from "./components/Filter";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import MenuAcc from "./components/MenuAcc";
-import { CartProvider } from "./contexts/CartContext";
 
 function App(props) {
   let param = useLocation();
 
   return (
     <div>
-      <CartProvider>
-        <Header />
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-3">
-              {param["pathname"].includes("user") ? <MenuAcc /> : <Filter />}
-            </div>
-            <div className="col-sm-9 padding-right">{props.children}</div>
+      <Header />
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-3">
+            {param["pathname"].includes("user") ? <MenuAcc /> : <Filter />}
           </div>
+          <div className="col-sm-9 padding-right">{props.children}</div>
         </div>
-        <Footer />
-      </CartProvider>
+      </div>
+      <Footer />
     </div>
   );
 }
